@@ -33,19 +33,12 @@ export class ItemSelector {
     }
 
     private async selectSize(size: string): Promise<void> {
-        const validSizes = ['XS', 'S', 'M', 'L', 'XL'];
-        if (!validSizes.includes(size)) {
-            throw new Error(`Invalid size: ${size}. Valid sizes are: ${validSizes.join(', ')}`);
-        }
         const sizeSelect = this.page.locator("#sizeSelect");
         await sizeSelect.waitFor();
         await sizeSelect.selectOption(size);
     }
 
     private async selectQuantity(quantity: number): Promise<void> {
-        if (quantity < 1 || quantity > 5) {
-            throw new Error(`Invalid quantity: ${quantity}. Must be 1 to 5.`);
-        }
         const quantitySelect = this.page.locator("#quantitySelect");
         await quantitySelect.waitFor();
         await quantitySelect.selectOption(quantity.toString());
