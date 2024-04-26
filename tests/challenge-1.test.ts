@@ -4,10 +4,10 @@ import { Checkout } from "../challenge-1/checkout";
 import { ItemPicker } from "../challenge-1/item-picker";
 import { ItemSelector } from "../challenge-1/item-selector";
 
-test("challenge-1", async({page}) => {
+test("challenge-1", async({page, isMobile}) => {
     const homeUrl = "https://shop.polymer-project.org";
 
-    let itemPicker = new ItemPicker(homeUrl, page)
+    let itemPicker = new ItemPicker(isMobile, homeUrl, page);
     const pickedItems = await itemPicker.pickRandomShopListItems(2, 2)
 
     let itemSelector = new ItemSelector(page)
