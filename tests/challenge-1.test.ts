@@ -1,8 +1,8 @@
 import { chromium, expect, test } from "@playwright/test";
-import { Cart } from "../custom-modules/cart";
-import { Checkout } from "../custom-modules/checkout";
-import { ItemPicker } from "../custom-modules/item-picker";
-import { ItemSelector } from "../custom-modules/item-selector";
+import { Cart } from "../challenge-1/cart";
+import { Checkout } from "../challenge-1/checkout";
+import { ItemPicker } from "../challenge-1/item-picker";
+import { ItemSelector } from "../challenge-1/item-selector";
 
 test("challenge-1", async() => {
     const homeUrl = "https://shop.polymer-project.org";
