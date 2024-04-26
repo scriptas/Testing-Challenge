@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Page, expect } from "@playwright/test";
 import { Item } from "./item";
 import { PickedItem } from "./item-picker";
 
@@ -13,6 +13,7 @@ export class ItemSelector {
     async selectItems(items: PickedItem[]): Promise<void> {
         for (const item of items) {
             await this.page.goto(item.url);
+            await this.page.waitForLoadState("networkidle");
             await this.selectSize(item.size);
             await this.selectQuantity(item.quantity);
             await this.clickAddToCartButton();
@@ -36,12 +37,18 @@ export class ItemSelector {
         const sizeSelect = this.page.locator("#sizeSelect");
         await sizeSelect.waitFor();
         await sizeSelect.selectOption(size);
+        const selectedOptionLocator = sizeSelect.locator("option:checked");
+        const selectedTextContent = await selectedOptionLocator.textContent();
+        expect(size).toBe(selectedTextContent);
     }
 
     private async selectQuantity(quantity: number): Promise<void> {
         const quantitySelect = this.page.locator("#quantitySelect");
         await quantitySelect.waitFor();
         await quantitySelect.selectOption(quantity.toString());
+        const selectedOptionLocator = quantitySelect.locator("option:checked");
+        const selectedTextContent = await selectedOptionLocator.textContent();
+        expect(quantity.toString()).toBe(selectedTextContent);
     }
 
     private async getItemPrice(): Promise<number> {
@@ -76,9 +83,8 @@ export class ItemSelector {
         const addToCartButton = this.page.locator("text=Add to Cart");
         await addToCartButton.waitFor();
         await addToCartButton.click();
-
-        const addedToCartNotification = this.page.locator(".label:has-text('Added to cart')");
-        await addedToCartNotification.waitFor();
+        const cartModal = this.page.locator('shop-cart-modal.opened');
+        await cartModal.waitFor();
     }
 
 }
