@@ -7,12 +7,14 @@ export type PickedItem = {
 };
 
 export class ItemPicker{
+    private isMobile: boolean;
     private page: Page;
     private homeUrl: string;
     private validSizes: string[] = ["XS", "S", "M", "L", "XL"];
     private validQuantities: number[] = [1, 2, 3, 4, 5];
 
-    constructor(homeUrl: string, page: Page) {
+    constructor(isMobile: boolean, homeUrl: string, page: Page) {
+        this.isMobile = isMobile
         this.homeUrl = homeUrl
         this.page = page
     }
@@ -55,13 +57,31 @@ export class ItemPicker{
 
     private async getShopListUrls(): Promise<string[]> {
         await this.page.goto(this.homeUrl);
-        const tabContainer = this.page.locator("#tabContainer > shop-tabs");
-        await tabContainer.waitFor();
-        const links = await this.page.$$eval('#tabContainer a', (elements) => {
-            return elements.map((element) => element.getAttribute('href'));
-        });
-        const validLinks = links.filter(link => link);
-        const fullShopListUrls = validLinks.map(link => `${this.homeUrl}${link}`);
-        return fullShopListUrls;
+
+        let fullLinks: string[] = [];
+        if (this.isMobile) {
+            const paperIconButton = this.page.locator(".menu-btn");
+            await paperIconButton.waitFor();
+            await paperIconButton.click();
+
+            const ironSelectorDrawerListLocator = this.page.locator(".drawer-list");
+            await ironSelectorDrawerListLocator.waitFor();
+            const links = await this.page.$$eval('.drawer-list a', (elements) => {
+                return elements.map((element) => element.getAttribute('href'));
+            });
+            fullLinks = links.map(link => `${this.homeUrl}${link}`);
+        } else {
+            const tabContainer = this.page.locator("#tabContainer > shop-tabs");
+            await tabContainer.waitFor();
+
+            const links = await this.page.$$eval("#tabContainer a", (elements) => {
+                return elements.map((element) => element.getAttribute("href"));
+            });
+            const validLinks = links.filter(link => link);
+            fullLinks = validLinks.map(link => `${this.homeUrl}${link}`);
+        }
+
+        return fullLinks;
     }
+
 }
