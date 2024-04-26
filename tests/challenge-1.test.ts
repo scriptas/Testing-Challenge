@@ -1,14 +1,11 @@
-import { chromium, expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { Cart } from "../challenge-1/cart";
 import { Checkout } from "../challenge-1/checkout";
 import { ItemPicker } from "../challenge-1/item-picker";
 import { ItemSelector } from "../challenge-1/item-selector";
 
-test("challenge-1", async() => {
+test("challenge-1", async({page}) => {
     const homeUrl = "https://shop.polymer-project.org";
-    const browser = await chromium.launch()
-    const context = await browser.newContext();
-    const page = await context.newPage();
 
     let itemPicker = new ItemPicker(homeUrl, page)
     const pickedItems = await itemPicker.pickRandomShopListItems(2, 2)
