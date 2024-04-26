@@ -29,7 +29,7 @@ export class ItemSelector {
         for (const item of this.selectedItems) {
             totalPrice += item.price;
         }
-        return totalPrice;
+        return parseFloat(totalPrice.toFixed(2));
     }
 
     private async selectSize(size: string): Promise<void> {
