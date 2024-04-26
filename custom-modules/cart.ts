@@ -64,17 +64,26 @@ export class Cart {
             const subTotalTextNoDollarSign = subTotalText.replace("$", "");
             return Number(parseFloat(subTotalTextNoDollarSign).toFixed(2));
         } else {
-            throw new Error("Failed to get subtotal.")
+            throw new Error("Failed to get subtotal.");
         }
     }
     
+    async goToCheckout(): Promise<void> {
+        await this.goToCart();
+        const checkoutButtonLocator = this.page.locator("text=Checkout");
+        await checkoutButtonLocator.waitFor();
+        const href = await checkoutButtonLocator.getAttribute("href");
+        await this.page.goto(`${this.homeUrl}${href}`);
+        await this.page.waitForLoadState("networkidle");
+    }
+
     private async goToCart(): Promise<void> {
-        await this.page.goto(this.homeUrl)
-        const cartBtnContainer = this.page.locator(".cart-btn-container a")
-        await cartBtnContainer.waitFor()
-        const href = await cartBtnContainer.getAttribute("href")
-        await this.page.goto(`${this.homeUrl}${href}`)
-        await this.page.waitForLoadState("networkidle")
+        await this.page.goto(this.homeUrl);
+        const cartBtnContainer = this.page.locator(".cart-btn-container a");
+        await cartBtnContainer.waitFor();
+        const href = await cartBtnContainer.getAttribute("href");
+        await this.page.goto(`${this.homeUrl}${href}`);
+        await this.page.waitForLoadState("networkidle");
     }
 
 }
