@@ -8,11 +8,12 @@ export type PickedItem = {
 
 export class ItemPicker{
     private page: Page;
-    private homeUrl: string = "https://shop.polymer-project.org";
+    private homeUrl: string;
     private validSizes: string[] = ["XS", "S", "M", "L", "XL"];
     private validQuantities: number[] = [1, 2, 3, 4, 5];
 
-    constructor(page: Page) {
+    constructor(homeUrl: string, page: Page) {
+        this.homeUrl = homeUrl
         this.page = page
     }
 

@@ -3,9 +3,10 @@ import { Item } from "./item";
 
 export class Cart {
     private page: Page;
-    private homeUrl: string = "https://shop.polymer-project.org";
+    private homeUrl: string;
 
-    constructor(page: Page) {
+    constructor(homeUrl: string, page: Page) {
+        this.homeUrl = homeUrl
         this.page = page
     }
 
