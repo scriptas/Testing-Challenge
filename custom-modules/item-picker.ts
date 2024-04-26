@@ -1,14 +1,22 @@
 import { Page } from "@playwright/test";
 
-export class RandomItemGetter{
+export type PickedItem = {
+    url: string;
+    size: string;
+    quantity: number;
+};
+
+export class ItemPicker{
     private page: Page;
     private homeUrl: string = "https://shop.polymer-project.org";
+    private validSizes: string[] = ["XS", "S", "M", "L", "XL"];
+    private validQuantities: number[] = [1, 2, 3, 4, 5];
 
     constructor(page: Page) {
         this.page = page
     }
 
-    async getRandomShopListItems(amtMens: number, amtLadies: number): Promise<string[]> {
+    async pickRandomShopListItems(amtMens: number, amtLadies: number): Promise<PickedItem[]> {
         const shopListUrls = await this.getShopListUrls();
         const mensOuterwearUrl = shopListUrls.filter(url => url.includes('mens_outerwear'))[0];
         const ladiesOuterwearUrl = shopListUrls.filter(url => url.includes('ladies_outerwear'))[0];
@@ -19,7 +27,13 @@ export class RandomItemGetter{
         const allLadiesItems = await this.getAllShopListItems(ladiesOuterwearUrl);
         const randomLadiesItems = this.getRandomItemsFromArray(allLadiesItems, amtLadies);
 
-        return [...randomMensItems, ...randomLadiesItems];
+        const allItems = [...randomMensItems, ...randomLadiesItems];
+
+        return allItems.map(itemUrl => ({
+            url: itemUrl,
+            size: this.validSizes[Math.floor(Math.random() * this.validSizes.length)],
+            quantity: this.validQuantities[Math.floor(Math.random() * this.validQuantities.length)]
+        }));
     }
 
     private getRandomItemsFromArray(arr: string[], n: number): string[] {
