@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: 'html',
   reportSlowTests: null,
   use: {
-    headless: false,
+    headless: true,
     trace: 'on-first-retry',
   },
 
