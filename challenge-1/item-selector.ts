@@ -80,7 +80,7 @@ export class ItemSelector {
     }
     
     private async clickAddToCartButton(): Promise<void> {
-        const addToCartButton = this.page.locator("text=Add to Cart");
+        const addToCartButton = this.page.locator("button[aria-label='Add this item to cart']");
         await addToCartButton.waitFor();
         await addToCartButton.click();
         const cartModal = this.page.locator('shop-cart-modal.opened');

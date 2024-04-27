@@ -70,9 +70,12 @@ export class Cart {
     
     async goToCheckout(): Promise<void> {
         await this.goToCart();
-        const checkoutButtonLocator = this.page.locator("text=Checkout");
-        await checkoutButtonLocator.waitFor();
-        const href = await checkoutButtonLocator.getAttribute("href");
+        const checkoutBox = this.page.locator('.checkout-box');
+        await checkoutBox.waitFor();
+        const shopButton = checkoutBox.locator('shop-button');
+        await shopButton.waitFor();
+        const link = await shopButton.locator('a');
+        const href = await link.getAttribute('href');
         await this.page.goto(`${this.homeUrl}${href}`);
         await this.page.waitForLoadState("networkidle");
     }
