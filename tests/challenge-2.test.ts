@@ -1,12 +1,8 @@
-import { chromium, test } from "@playwright/test";
+import { test } from "@playwright/test";
 
-test("challenge-2", async() => {
-    const browser = await chromium.launch()
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    
-    const path = require("path")
-    const filePath = path.resolve(__dirname, "../challenge-2/file.html");
+test("challenge-2", async({page}) => {
+    const path = require("path");
+    const filePath = `file:///${path.resolve(__dirname, "../challenge-2/file.html")}`;
     await page.goto(filePath);
 
     // // Click the “Dog” option.
@@ -28,5 +24,4 @@ test("challenge-2", async() => {
     const year2023Option = page.locator(".scrollbar.dropdown__list li:has-text('2023')");
     await year2023Option.waitFor();
     await year2023Option.click();
-    
 })
